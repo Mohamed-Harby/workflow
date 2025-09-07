@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:design="http://flowable.org/design" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://flowable.org/test" exporter="Flowable Design" exporterVersion="2025.1.02" design:palette="flowable-work-process-palette">
+    <process id="simpleTextProcessingWorkflow" name="Simple Text Processing Workflow" isExecutable="true" flowable:candidateStarterGroups="flowableUser">
+        <extensionElements>
+            <design:stencilid><![CDATA[BPMNDiagram]]></design:stencilid>
+            <design:creationdate><![CDATA[2025-09-07T16:07:04.906Z]]></design:creationdate>
+            <design:modificationdate><![CDATA[2025-09-07T16:07:04.906Z]]></design:modificationdate>
+        </extensionElements>
+        <startEvent id="startEvent1" name="Start" flowable:initiator="initiator">
+            <extensionElements>
+                <design:stencilid><![CDATA[StartNoneEvent]]></design:stencilid>
+            </extensionElements>
+        </startEvent>
+        <userTask id="userTask1" name="Input Text" flowable:assignee="${initiator}">
+            <extensionElements>
+                <design:stencilid><![CDATA[FormTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[Task]]></design:stencilsuperid>
+            </extensionElements>
+        </userTask>
+        <serviceTask id="httpTask1" name="Send to Gemini Model" flowable:delegateExpression="${serviceRegistryService}">
+            <extensionElements>
+                <design:stencilid><![CDATA[ServiceRegistryTask]]></design:stencilid>
+                <design:stencilsuperid><![CDATA[ServiceTask]]></design:stencilsuperid>
+            </extensionElements>
+        </serviceTask>
+        <endEvent id="endEvent1" name="End">
+            <extensionElements>
+                <design:stencilid><![CDATA[EndNoneEvent]]></design:stencilid>
+            </extensionElements>
+        </endEvent>
+        <sequenceFlow id="flow1" sourceRef="startEvent1" targetRef="userTask1">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="flow2" sourceRef="userTask1" targetRef="httpTask1">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+        <sequenceFlow id="flow3" sourceRef="httpTask1" targetRef="endEvent1">
+            <extensionElements>
+                <design:stencilid><![CDATA[SequenceFlow]]></design:stencilid>
+            </extensionElements>
+        </sequenceFlow>
+    </process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_simpleTextProcessingWorkflow">
+        <bpmndi:BPMNPlane bpmnElement="simpleTextProcessingWorkflow" id="BPMNPlane_simpleTextProcessingWorkflow">
+            <bpmndi:BPMNShape bpmnElement="startEvent1" id="BPMNShape_startEvent1">
+                <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="245.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="userTask1" id="BPMNShape_userTask1">
+                <omgdc:Bounds height="80.0" width="100.0" x="190.0" y="220.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="httpTask1" id="BPMNShape_httpTask1">
+                <omgdc:Bounds height="80.0" width="100.0" x="350.0" y="220.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="endEvent1" id="BPMNShape_endEvent1">
+                <omgdc:Bounds height="30.0" width="30.0" x="510.0" y="245.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="130.0" y="260.0"></omgdi:waypoint>
+                <omgdi:waypoint x="190.0" y="260.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+                <omgdi:waypoint x="290.0" y="260.0"></omgdi:waypoint>
+                <omgdi:waypoint x="350.0" y="260.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="15.0" flowable:targetDockerY="15.0">
+                <omgdi:waypoint x="450.0" y="260.0"></omgdi:waypoint>
+                <omgdi:waypoint x="510.0" y="260.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>
