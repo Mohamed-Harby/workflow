@@ -21,11 +21,10 @@ public class WorkflowController {
 
     // Show a simple start page
     @GetMapping("/start/{processKey}")
-    public String startProcess(@PathVariable String processKey, Model model) {
-        String processId = workflowService.startProcess(processKey, Map.of("text", "Hello Flowable!"));
-        model.addAttribute("processId", processId);
-        model.addAttribute("activePage", "start");
-        return "workflow-start"; // Thymeleaf template (resources/templates/workflow-start.html)
+    public String startProcess(@PathVariable String processKey) {
+        // For backward compatibility; start a process and redirect to Vaadin UI
+        workflowService.startProcess(processKey, Map.of("text", "Hello Flowable!"));
+        return "redirect:/ui/start";
     }
 
     // Complete a task and then show remaining tasks
@@ -39,23 +38,15 @@ public class WorkflowController {
 
     // Show active tasks
     @GetMapping("/tasks")
-    public String getTasks(@RequestParam(required = false) String processInstanceId, Model model) {
-        List<org.flowable.task.api.Task> tasks;
-        if (processInstanceId != null) {
-            // Get task objects instead of just IDs
-            tasks = taskService.createTaskQuery().processInstanceId(processInstanceId).list();
-        } else {
-            tasks = workflowService.getAllActiveTasks();
-        }
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("activePage", "tasks");
-        return "workflow-tasks";
+    public String getTasks(@RequestParam(required = false) String processInstanceId) {
+        // Redirect to Vaadin tasks view; filtering can be added via query params if needed
+        return "redirect:/ui/tasks";
     }
 
     @GetMapping("/start")
-    public String showStartForm(Model model) {
-        model.addAttribute("activePage", "start");
-        return "workflow-start-form"; // Thymeleaf template
+    public String showStartForm() {
+        // Redirect to Vaadin start view
+        return "redirect:/ui/start";
     }
 
     @PostMapping("/start")
@@ -63,5 +54,11 @@ public class WorkflowController {
         // Start the process with the provided key and text
         String processId = workflowService.startProcess(processKey, Map.of("text", text != null ? text : ""));
         return "redirect:/workflow/start/" + processKey + "?processId=" + processId;
+    }
+
+    // App landing: redirect root to Vaadin Tasks view
+    @GetMapping("/")
+    public String rootRedirect() {
+        return "redirect:/ui/tasks";
     }
 }
