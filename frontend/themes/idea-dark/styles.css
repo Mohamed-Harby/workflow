@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --idea-bg: #1e1f22;
+  --idea-panel: #2b2d30;
+  --idea-panel-alt: #313338;
+  --idea-border: #3c3f41;
+  --idea-text: #c7c7c7;
+  --idea-text-strong: #e6e6e6;
+  --idea-text-muted: #8b8e93;
+  --idea-accent: #3574f0;
+  --idea-accent-strong: #2f66d0;
+  --idea-green: #3fb950;
+  --idea-red: #f85149;
+  --idea-radius: 8px;
+}
+
+html,
+body,
+:host {
+  --lumo-base-color: var(--idea-bg);
+  --lumo-body-text-color: var(--idea-text);
+  --lumo-primary-color: var(--idea-accent);
+  --lumo-primary-color-50pct: rgba(53, 116, 240, 0.5);
+  --lumo-primary-color-10pct: rgba(53, 116, 240, 0.1);
+  --lumo-border-radius: 8px;
+  --lumo-contrast-10pct: rgba(255,255,255,0.06);
+  --lumo-contrast-20pct: rgba(255,255,255,0.12);
+  --lumo-contrast-30pct: rgba(255,255,255,0.18);
+  --lumo-contrast-40pct: rgba(255,255,255,0.24);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* AppLayout header */
+vaadin-app-layout::part(navbar) {
+  background: var(--idea-panel-alt);
+  border-bottom: 1px solid var(--idea-border);
+}
+
+/* Drawer */
+vaadin-app-layout::part(drawer) {
+  background: var(--idea-panel);
+  border-right: 1px solid var(--idea-border);
+}
+
+vaadin-side-nav::part(nav) {
+  padding: 8px;
+}
+
+vaadin-side-nav-item::part(content) {
+  border-radius: 6px;
+}
+
+vaadin-side-nav-item[active]::part(content),
+vaadin-side-nav-item::part(content):hover {
+  background: rgba(53,116,240,0.18);
+}
+
+/* Buttons */
+vaadin-button[theme~="primary"] {
+  background: var(--idea-accent);
+  color: #fff;
+}
+vaadin-button[theme~="primary"]:hover {
+  background: var(--idea-accent-strong);
+}
+
+/* Text fields and inputs */
+vaadin-text-field::part(input-field),
+vaadin-text-area::part(input-field) {
+  background: var(--idea-panel-alt);
+  border: 1px solid var(--idea-border);
+}
+
+/* Grid */
+vaadin-grid::part(cell) {
+  border-bottom: 1px solid var(--idea-border);
+}
+vaadin-grid::part(header-cell) {
+  background: var(--idea-panel-alt);
+  color: var(--idea-text);
+  border-bottom: 1px solid var(--idea-border);
+}
+vaadin-grid::part(body-cell) {
+  background: var(--idea-panel);
+}
+
+/* Generic cards / panels */
+.elevated {
+  background: var(--idea-panel);
+  border: 1px solid var(--idea-border);
+  border-radius: var(--idea-radius);
+}
+
+h1, h2, h3, h4, h5 { color: var(--idea-text-strong); }
+.small, .muted { color: var(--idea-text-muted); }
