@@ -11,54 +11,129 @@ import org.springframework.ui.Model;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/workflow")
 public class WorkflowController {
-
     private final WorkflowService workflowService;
-    private final TaskService taskService;
 
-    // Show a simple start page
+    /**
+     * Starts a process instance with the given process key and a default variable.
+     *
+     * @param processKey the key of the process definition
+     */
     @GetMapping("/start/{processKey}")
-    public String startProcess(@PathVariable String processKey) {
-        // For backward compatibility; start a process and redirect to Vaadin UI
-        workflowService.startProcess(processKey, Map.of("text", "Hello Flowable!"));
-        return "redirect:/ui/start";
+    public void startProcess(@PathVariable String processKey) {
+        workflowService.startProcess(processKey, Map.of());
     }
 
-    // Complete a task and then show remaining tasks
-    @PostMapping("/task/{taskId}/complete")
-    public String completeTask(@PathVariable String taskId, @RequestParam(required = false) String text, Model model) {
-        workflowService.completeTask(taskId, Map.of("text", text != null ? text : "Hello from User!"));
-
-        // After completing, redirect to the tasks page
-        return "redirect:/workflow/tasks";
-    }
-
-    // Show active tasks
-    @GetMapping("/tasks")
-    public String getTasks(@RequestParam(required = false) String processInstanceId) {
-        // Redirect to Vaadin tasks view; filtering can be added via query params if needed
-        return "redirect:/ui/tasks";
-    }
-
-    @GetMapping("/start")
-    public String showStartForm() {
-        // Redirect to Vaadin start view
-        return "redirect:/ui/start";
-    }
-
+    /**
+     * Handles starting a process instance from a form submission with generic variables.
+     *
+     * @param processKey the key of the process definition
+     * @param variables map of variables to start the process with
+     */
     @PostMapping("/start")
-    public String handleStartForm(@RequestParam String processKey, @RequestParam(required = false) String text) {
-        // Start the process with the provided key and text
-        String processId = workflowService.startProcess(processKey, Map.of("text", text != null ? text : ""));
-        return "redirect:/workflow/start/" + processKey + "?processId=" + processId;
+    public void handleStartForm(@RequestParam String processKey, @RequestBody Map<String, Object> variables) {
+        workflowService.startProcess(processKey, variables);
     }
 
-    // App landing: redirect root to Vaadin Tasks view
-    @GetMapping("/")
-    public String rootRedirect() {
-        return "redirect:/ui/tasks";
+    /**
+     * Suspends the process instance with the given ID.
+     *
+     * @param processInstanceId the ID of the process instance
+     */
+    @PostMapping("/process/{processInstanceId}/suspend")
+    public void suspendProcess(@PathVariable String processInstanceId) {
+        workflowService.suspendProcess(processInstanceId);
+    }
+
+    /**
+     * Resumes the process instance with the given ID.
+     *
+     * @param processInstanceId the ID of the process instance
+     */
+    @PostMapping("/process/{processInstanceId}/resume")
+    public void resumeProcess(@PathVariable String processInstanceId) {
+        workflowService.resumeProcess(processInstanceId);
+    }
+
+    /**
+     * Deletes the process instance with the given ID and reason.
+     *
+     * @param processInstanceId the ID of the process instance
+     * @param reason reason for deletion
+     */
+    @DeleteMapping("/process/{processInstanceId}")
+    public void deleteProcess(@PathVariable String processInstanceId, @RequestParam String reason) {
+        workflowService.deleteProcess(processInstanceId, reason);
+    }
+
+    /**
+     * Retrieves all variables for the given process instance.
+     *
+     * @param processInstanceId the ID of the process instance
+     * @return map of variables
+     */
+    @GetMapping("/process/{processInstanceId}/variables")
+    @ResponseBody
+    public Map<String, Object> getProcessVariables(@PathVariable String processInstanceId) {
+        return workflowService.getProcessVariables(processInstanceId);
+    }
+
+    /**
+     * Sets a variable for the given process instance.
+     *
+     * @param processInstanceId the ID of the process instance
+     * @param variableName the variable name
+     * @param value the variable value
+     */
+    @PostMapping("/process/{processInstanceId}/variables")
+    public void setProcessVariable(@PathVariable String processInstanceId, @RequestParam String variableName, @RequestParam String value) {
+        workflowService.setProcessVariable(processInstanceId, variableName, value);
+    }
+
+    /**
+     * Completes the task with the given ID and optional variables.
+     *
+     * @param taskId the ID of the task to complete
+     * @param variables map of variables to include when completing the task
+     */
+    @PostMapping("/task/{taskId}/complete")
+    public void completeTask(@PathVariable String taskId, @RequestBody Map<String, Object> variables) {
+        workflowService.completeTask(taskId, variables);
+    }
+
+    /**
+     * Retrieves all active tasks.
+     *
+     * @return list of task IDs
+     */
+    @GetMapping("/tasks")
+    @ResponseBody
+    public List<String> getAllActiveTasks() {
+        return workflowService.getActiveTasks(null);
+    }
+
+    /**
+     * Retrieves all running processes.
+     *
+     * @return list of running processes
+     */
+    @GetMapping("/process/running")
+    @ResponseBody
+    public Object getRunningProcesses() {
+        return workflowService.getRunningProcesses();
+    }
+
+    /**
+     * Retrieves all finished processes.
+     *
+     * @return list of finished process IDs
+     */
+    @GetMapping("/process/finished")
+    @ResponseBody
+    public List<String> getFinishedProcesses() {
+        return workflowService.getFinishedProcesses();
     }
 }

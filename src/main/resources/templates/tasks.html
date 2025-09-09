@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Workflow Tasks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 16px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        input[type="submit"] {
+            padding: 6px 14px;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        input[type="submit"]:hover {
+            background-color: #388e3c;
+        }
+        .copy-btn {
+            margin-left: 8px;
+            padding: 4px 8px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+            background-color: #eee;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .copy-btn:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+<h1>Active Tasks</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Assignee</th>
+        <th>Process Instance ID</th>
+        <th>Created Date</th>
+        <th>Due Date</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="task : ${tasks}">
+        <td>
+            <span th:text="${task.id}"></span>
+            <button type="button" class="copy-btn" onclick="copyToClipboard(this.previousElementSibling.innerText)">Copy</button>
+        </td>
+        <td th:text="${task.name}"></td>
+        <td th:text="${task.assignee}"></td>
+        <td>
+            <span th:text="${task.processInstanceId}"></span>
+            <button type="button" class="copy-btn" onclick="copyToClipboard(this.previousElementSibling.innerText)">Copy</button>
+        </td>
+        <td th:text="${task.createTime}"></td>
+        <td th:text="${task.dueDate}"></td>
+        <td>
+            <form th:action="@{|/ui/tasks/${task.id}/complete|}" method="post">
+                <input type="submit" value="Complete Task"/>
+            </form>
+        </td>
+    </tr>
+</table>
+
+</body>
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Copied: " + text);
+        });
+    }
+</script>
+</html>
